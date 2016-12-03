@@ -3,21 +3,20 @@ package com.group7.YelpDataReader;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
 
 /**
  * Created by cabeggar on 12/3/16.
  */
-
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-class Review {
+public class User {
 
-    private String business_id;
     private String user_id;
-    private float stars;
-    private String text;
-    private String date;
-    private LinkedHashMap<String, Integer> votes;
+    private String name;
+    private int review_count;
+    private float average_stars;
+    private ArrayList<String> elite;
+    private int fans;
 
 }
