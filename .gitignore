@@ -2,3 +2,4 @@ YelpDataReader/yelp_dataset_challenge
 YelpDataReader/out
 YelpDataReader/.idea
 *.iml
+MySQL/yelp.sql
