@@ -14,7 +14,6 @@ class Business {
 
     private String business_id;
     private String name;
-    private ArrayList<String> neighborhoods;
     private String full_address;
     private String city;
     private String state;

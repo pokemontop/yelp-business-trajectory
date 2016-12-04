@@ -19,7 +19,7 @@ public class UserReaderTest {
 
     @Test
     public void startReadingTest() throws IOException {
-        userReader.startReading();
+        System.out.println(userReader.findElites());
     }
 
 }

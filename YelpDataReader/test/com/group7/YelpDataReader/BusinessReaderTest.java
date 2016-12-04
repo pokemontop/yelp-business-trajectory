@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * Created by cabeggar on 12/3/16.
@@ -21,8 +22,8 @@ public class BusinessReaderTest {
     }
 
     @Test
-    public void startReadingTest() throws IOException {
-        businessReader.startReading();
+    public void startReadingTest() throws IOException, SQLException {
+        System.out.println(businessReader.readBusiness());
     }
 
 }
