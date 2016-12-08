@@ -1,0 +1,164 @@
+<!Doctype: html>
+
+<html>
+<style>
+.axis path,
+.axis line{
+  fill: none;
+  stroke: black;
+}
+
+.tick line{
+  opacity: 0.2;
+}
+#tooltip{
+	position:absolute;
+	top:0;
+	left:0;
+	background-color:rgba(255, 255, 255, 0.8);
+	padding:5;
+	border:solid 1px black;
+	visibility: hidden;
+	transition:all 0.2s;
+	opacity: 0;
+}
+#tooltip{
+	position:absolute;
+	top:0;
+	left:0;
+	background-color:rgba(255, 255, 255, 0.8);
+	padding:5;
+	border:solid 1px black;
+	visibility: hidden;
+	opacity: 0;
+}
+</style>
+<body>
+<div id="tooltip">Tooltip</div>
+</body>
+
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script>
+
+	d3.csv("https://raw.githubusercontent.com/cabeggar/yelp-business-trajectory/master/type-rank-trend/ranks.csv", function(error, data){
+
+		data.forEach(function(d) {
+			d.rank = +d.rank;
+    	});
+
+		// Set the dimensions of the canvas / graph
+		var margin = {top:30, left:40, right:30, bottom:30};
+		    width = 1000 - margin.left - margin.right;
+		    height = 500 - margin.top - margin.bottom;
+
+		var svg = d3.select("body")
+				    .append("svg")
+				        .attr("width", width + margin.left + margin.right)
+				        .attr("height", height + margin.top + margin.bottom)
+				    .append("g")
+			        .attr("transform", 
+			              "translate(" + margin.left + "," + margin.top + ")");
+
+		var lineFunction = d3.svg.line()
+		                         .x(function(d) { return xScale(d.year); })
+		                         .y(function(d) { return yScale(11 - d.rank); })
+		                         .interpolate("linear");
+
+		var xAx = svg.append('g')
+					.attr("class", "axis")
+					.attr("transform","translate(0, " + height + ")");
+
+		var yAx = svg.append('g')
+					.attr("class", "axis");
+
+		var xScale = d3.scale.linear().domain([2004, 2016]).range([0, width]);
+		var yScale = d3.scale.linear().domain([11, 1]).range([height, 0]);
+		var colorScale = d3.scale.category10();
+		// colorScale.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
+
+		var xAxis = d3.svg.axis().scale(xScale).orient("bottom")
+												.ticks(13)
+												.innerTickSize(-height)
+											    .outerTickSize(0)
+											    .tickPadding(10)
+											    .tickFormat(function(year){return year;});
+
+		var yAxis = d3.svg.axis().scale(yScale).orient("left")
+												.ticks(11)
+												.innerTickSize(-width)
+											    .outerTickSize(0)
+											    .tickPadding(10);
+
+		xAx.call(xAxis);
+		yAx.call(yAxis);
+
+		// var ranks = colorScale.domain().map(function(type) {
+		//     return {
+		//       type: type,
+		//       values: data.map(function(d) {
+		//         return {year: d.year, rank: d[type]};
+		//       })
+		//     };
+		//   });
+
+		// var rank = svg.selectAll(".rank")
+		// 		      .data(ranks)
+		// 		      .enter().append("g")
+		// 		      .attr("class", "rank");
+
+	 //    rank.append("path")
+	 //      .attr("class", "line")
+	 //      .attr("d", function(d) { return lineFunction(d.values); })
+	 //      .attr("stroke-width", "3")
+	 //      .style("stroke", function(d) { return colorScale(d.name); });
+
+		// Nest the entries by type
+	    var dataNest = d3.nest()
+	        .key(function(d) {return d.type;})
+	        .entries(data);
+
+	    // Loop through each type
+	    dataNest.forEach(function(d) {
+
+	        var path = svg.append("path")
+				            .attr("class", "line")
+				            .style("stroke", function() {return d.color = colorScale(d.key); })
+				            .attr("d", lineFunction(d.values))
+				            .attr("stroke-width", 4)
+				            .attr("fill","none");
+
+	    	svg.append("g").selectAll("circle")
+	    			.data(d.values)
+				    .enter().append("circle")
+				    .attr("r", 7)
+				    .attr("cx", function(d) {return xScale(d.year); })
+				    .attr("cy", function(d) {return yScale(11 - d.rank); })
+				    .attr("fill", function(d){return colorScale(d.type)})
+				    .on("mouseenter", function(d){
+				    	d3.select(this).attr("r", 13);
+				    	d3.select("#tooltip").style({
+							visibility:"visible", 
+							left: xScale(d.year),
+							top : yScale(12-d.rank),
+							opacity: 1
+						}).html(function(){
+							var next = parseInt(d.year) + 1;
+							return d.type + "<br/>" + d.year + ' - ' + next;
+						});
+				    })
+				    .on("mouseleave", function(d){
+				    	d3.select(this).attr("r", 7);
+				    	d3.select("#tooltip").style({
+							visibility:"hidden", 
+							left: xScale(d.year),
+							top : yScale(12-d.rank),
+							opacity: 1
+						}).html(function(){
+							var next = parseInt(d.year) + 1;
+							return d.type + "<br/>" + d.year + ' - ' + next;
+						});
+				    });
+	    });
+	});
+</script>
+</html>
