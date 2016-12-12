@@ -88,12 +88,15 @@ d3.csv("https://raw.githubusercontent.com/cabeggar/yelp-business-trajectory/mast
                     .attr("d", lineFunction([d.values[di], d.values[di + 1]]))
                     .attr("stroke-width", 5)
                     .attr("fill", "none")
+                    .on("click", function() {
+                        typeAndYear(typed, dv.year);
+                    })
                     .on("mouseenter", function () {
                         d3.select(this).attr("stroke-width", 8);
                         d3.select("#tooltip").style({
                             visibility: "visible",
-                            left: d3.event.clientX + 30,
-                            top: d3.event.clientY + 30,
+                            left: d3.event.clientX + 10,
+                            top: d3.event.clientY + 10,
                             opacity: 1
                         }).html(function () {
                             var next = parseInt(dv.year) + 1;
@@ -106,8 +109,8 @@ d3.csv("https://raw.githubusercontent.com/cabeggar/yelp-business-trajectory/mast
                         d3.select(this).attr("r", 7);
                         d3.select("#tooltip").style({
                             visibility: "hidden",
-                            left: d3.event.clientX + 30,
-                            top: d3.event.clientY + 30,
+                            left: d3.event.clientX + 10,
+                            top: d3.event.clientY + 10,
                             opacity: 1
                         }).html(function () {
                             var next = parseInt(dv.year) + 1;

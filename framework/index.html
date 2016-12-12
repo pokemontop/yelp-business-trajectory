@@ -55,6 +55,7 @@
     <h1>Yelp Business Trajectory</h1>
     <div class="container">
         <div id="typeList" class="list-group">
+            <a class="list-group-item">All</a>
             <a class="list-group-item">American and British</a>
             <a class="list-group-item">Chinese</a>
             <a class="list-group-item">Comfort Food</a>
@@ -101,6 +102,19 @@
             type.style.color = "black";
             type.style.fontWeight = "normal";
         }
+    }
+    
+    function typeAndYear(typeName, startYear) {
+        var types = document.getElementById("typeList").children;
+        for (var i = 0; i < types.length; i++) {
+            var type = types[i];
+            if (type.textContent == typeName) {
+                type.className += " active";
+                break;
+            }
+        }
+        document.getElementById("rankChart").style.display = "none";
+        document.getElementById("businessList").style.display = "block";
     }
 </script>
 </html>
