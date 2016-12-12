@@ -55,7 +55,7 @@
     <h1>Yelp Business Trajectory</h1>
     <div class="container">
         <div id="typeList" class="list-group">
-            <a class="list-group-item">All</a>
+            <a class="list-group-item active" onclick="showAll();">All</a>
             <a class="list-group-item">American and British</a>
             <a class="list-group-item">Chinese</a>
             <a class="list-group-item">Comfort Food</a>
@@ -108,6 +108,9 @@
         var types = document.getElementById("typeList").children;
         for (var i = 0; i < types.length; i++) {
             var type = types[i];
+            if (type.textContent == "All") {
+                type.className = "list-group-item";
+            }
             if (type.textContent == typeName) {
                 type.className += " active";
                 break;
@@ -115,6 +118,16 @@
         }
         document.getElementById("rankChart").style.display = "none";
         document.getElementById("businessList").style.display = "block";
+    }
+    
+    function showAll() {
+         var types = document.getElementById("typeList").children;
+        for (var i = 0; i < types.length; i++) {
+            var type = types[i];
+            type.className = "list-group-item";
+        }
+        document.getElementById("rankChart").style.display = "block";
+        document.getElementById("businessList").style.display = "none";
     }
 </script>
 </html>
